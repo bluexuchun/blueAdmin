@@ -1,0 +1,73 @@
+{
+  "name": "@icedesign/scaffold-lite",
+  "version": "1.0.0",
+  "description": "该模板适用于从 0 到 1 开始搭建项目，内置四套布局，以及基础的页面，路由和菜单展示",
+  "homepage": "https://alibaba.github.io/ice/scaffold-preview/ice-design-lite.html",
+  "dependencies": {
+    "@icedesign/base": "^0.2.0",
+    "@icedesign/container": "^0.1.0",
+    "@icedesign/data-binder": "^0.1.1",
+    "@icedesign/form-binder": "^0.1.15",
+    "@icedesign/icon": "^0.1.1",
+    "@icedesign/img": "^0.1.0",
+    "@icedesign/label": "^0.1.2",
+    "@icedesign/layout": "^0.1.0",
+    "@icedesign/menu": "^0.1.0",
+    "@icedesign/skin": "^0.1.0",
+    "bizcharts": "latest",
+    "braft-editor": "^1.8.10",
+    "classnames": "^2.2.5",
+    "enquire-js": "^0.1.2",
+    "foundation-symbol": "^0.1.0",
+    "immutable": "^3.8.2",
+    "is-hotkey": "^0.1.2",
+    "node-sass": "^4.9.2",
+    "prop-types": "^15.5.8",
+    "react": "^16.4.1",
+    "react-document-title": "^2.0.3",
+    "react-router": "^3.2.0",
+    "react-thunk": "^1.0.0",
+    "slate": "^0.32.5",
+    "slate-react": "^0.11.6"
+  },
+  "devDependencies": {
+    "axios": "^0.18.0",
+    "babel-eslint": "^8.0.3",
+    "cross-env": "^5.2.0",
+    "eslint": "^4.13.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-babel": "^4.1.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.5.1",
+    "fetch-jsonp": "^1.1.3",
+    "ice-scripts": "^1.1.1",
+    "jsonp": "^0.2.1",
+    "qs": "^6.5.1",
+    "react-cookies": "^0.1.0",
+    "react-dom": "^16.5.0",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
+  },
+  "scripts": {
+    "start": "ice dev",
+    "build": "ice build",
+    "lint": "eslint . --ext '.js,.jsx' --fix"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.com",
+    "access": "public"
+  },
+  "buildConfig": {
+    "theme": "@icedesign/skin",
+    "entry": "src/index.js"
+  },
+  "scaffoldConfig": {
+    "name": "blueLogistics",
+    "title": "blueLogistics",
+    "snapshot": "https://img.alicdn.com/tfs/TB1l_wWdHSYBuNjSspiXXXNzpXa-1920-1080.png"
+  },
+  "title": "blueAdmin"
+}
