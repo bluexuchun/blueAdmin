@@ -97,6 +97,8 @@ export default class SettingsForm extends Component {
   submit = () => {
     const that = this;
     that.formRef.validateAll((error, value) => {
+      console.log(value);
+      return false;
       if (error) {
         return false;
       }
@@ -215,7 +217,6 @@ export default class SettingsForm extends Component {
               </Col>
             </Row>
 
-
             <Row style={styles.formItem}>
               <Col xxs="6" s="2" l="2" style={styles.formLabel}>
                 排序：
@@ -233,7 +234,21 @@ export default class SettingsForm extends Component {
               </Col>
             </Row>
 
-
+            <Row style={styles.formItem}>
+              <Col xxs="6" s="2" l="2" style={styles.formLabel}>
+                分类：
+              </Col>
+              <Col s="12" l="10">
+                <IceFormBinder name="category">
+                    <Select
+                      placeholder="选择分类"
+                    >
+                      <Option value="fix">固定</Option>
+                      <Option value="dynamic">动态</Option>
+                    </Select>
+                </IceFormBinder>
+              </Col>
+            </Row>
 
             <Row style={styles.formItem}>
               <Col xxs="6" s="2" l="2" style={styles.formLabel}>
