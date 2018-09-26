@@ -131,6 +131,14 @@ export default class SortableTable extends Component {
     );
   };
 
+  renderCate = (value) => {
+    return (
+      <IceLabel inverse={false} status="default">
+        {value}
+      </IceLabel>
+    )
+  }
+
   changePage = (currentPage) => {
     this.queryCache.page = currentPage;
 
@@ -209,7 +217,7 @@ export default class SortableTable extends Component {
           'img_path':forData[i].img_path,
           'displayorder':forData[i].displayorder,
           'status':forData[i].status == '1' ? '开启' : '关闭',
-
+          'category':forData[i].category == '1' ? '固定' : '动态'
         })
       }
     }
@@ -280,6 +288,13 @@ export default class SortableTable extends Component {
               dataIndex="status"
               width={85}
               cell={this.renderStatus}
+            />
+
+            <Table.Column
+              title="分类"
+              dataIndex="category"
+              width={85}
+              cell={this.renderCate}
             />
 
             <Table.Column

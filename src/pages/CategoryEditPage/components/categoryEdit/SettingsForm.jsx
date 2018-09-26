@@ -97,8 +97,6 @@ export default class SettingsForm extends Component {
   submit = () => {
     const that = this;
     that.formRef.validateAll((error, value) => {
-      console.log(value);
-      return false;
       if (error) {
         return false;
       }
@@ -243,8 +241,8 @@ export default class SettingsForm extends Component {
                     <Select
                       placeholder="选择分类"
                     >
-                      <Option value="fix">固定</Option>
-                      <Option value="dynamic">动态</Option>
+                      <Option value="1">固定</Option>
+                      <Option value="2">动态</Option>
                     </Select>
                 </IceFormBinder>
               </Col>
