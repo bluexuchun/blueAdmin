@@ -24,8 +24,8 @@ const onRowClick = function(record, index, e) {
 
 const TabPane = Tab.TabPane;
 const tabs = [
-  { tab: "导航列表", key: 0, content: "/categoryListPage"},
-  { tab: "导航编辑", key: 1, content: "/categoryEditPage/create"},
+  { tab: "热门城市列表", key: 0, content: "/hotCityListPage"},
+  { tab: "热门城市编辑", key: 1, content: "/hotCityEditPage/cityId"},
 ];
 
 export default class SortableTable extends Component {
@@ -52,7 +52,7 @@ export default class SortableTable extends Component {
 
   componentWillMount(){
     const that=this;
-    const result = ajaxTo('api.php?entry=sys&c=logistics&a=nav&do=display');
+    const result = ajaxTo('api.php?entry=sys&c=logistics&a=city_hot&do=display');
     result.then(function(res){
       console.log(res.data)
 
@@ -69,25 +69,13 @@ export default class SortableTable extends Component {
     })
   }
 
-  // 封面图
-  renderTitle = (value, index, record) => {
-    return (
-      <div style={styles.titleWrapper}>
-        <div>
-          <IceImg src={record.cover} width={48} height={48} />
-        </div>
-        <span style={styles.title}>{record.title}</span>
-      </div>
-    );
-  };
-
   // 删除
   deleteId = (id) => {
     Dialog.confirm({
       content: "是否确认要删除？",
       title: "警告",
       onOk: () => {
-        const result = ajaxTo('api.php?entry=sys&c=logistics&a=nav&do=delete',{'id':id});
+        const result = ajaxTo('api.php?entry=sys&c=logistics&a=city_hot&do=delete',{'id':id});
         result.then((res) => {
           if(res.status == 1){
             let oldData=this.state.allData;
@@ -114,7 +102,7 @@ export default class SortableTable extends Component {
   };
 
   renderOperations = (value, index, record) => {
-    const toUrl = '/categoryEditPage/'+record.id;
+    const toUrl = '/hotCityEditPage/'+record.id;
     return (
       <div style={styles.complexTabTableOperation}>
         <Link to={toUrl}>编辑</Link>
@@ -141,7 +129,6 @@ export default class SortableTable extends Component {
 
   changePage = (currentPage) => {
     this.queryCache.page = currentPage;
-
   };
 
   tabClick = (key) => {
@@ -186,7 +173,7 @@ export default class SortableTable extends Component {
 
     const that = this;
 
-    const result = ajaxTo('api.php?entry=sys&c=logistics&a=nav&do=display',{
+    const result = ajaxTo('api.php?entry=sys&c=logistics&a=city_hot&do=display',{
       page:page
     });
 
@@ -213,11 +200,7 @@ export default class SortableTable extends Component {
         arr.push({
           'id':forData[i].id,
           'name':forData[i].name,
-          'url':forData[i].url,
-          'img_path':forData[i].img_path,
           'displayorder':forData[i].displayorder,
-          'status':forData[i].status == '1' ? '开启' : '关闭',
-          'category':forData[i].category == '1' ? '固定' : '动态'
         })
       }
     }
@@ -263,38 +246,9 @@ export default class SortableTable extends Component {
             />
 
             <Table.Column
-              title="封面"
-              dataIndex="type"
-              width={250}
-              dataIndex="img_path"
-              cell={this.getIcon}
-            >
-            </Table.Column>
-
-            <Table.Column
-              title="链接"
-              width={220}
-              dataIndex="url"
-            />
-
-            <Table.Column
               title="排序"
               dataIndex="displayorder"
               width={150}
-            />
-
-            <Table.Column
-              title="状态"
-              dataIndex="status"
-              width={85}
-              cell={this.renderStatus}
-            />
-
-            <Table.Column
-              title="分类"
-              dataIndex="category"
-              width={85}
-              cell={this.renderCate}
             />
 
             <Table.Column

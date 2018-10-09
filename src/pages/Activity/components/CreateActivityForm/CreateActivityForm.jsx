@@ -1073,7 +1073,7 @@ export default class CreateActivityForm extends Component {
 
               <Row style={styles.formItem}>
                 <Col xxs="6" s="2" l="4" style={styles.formLabel}>
-                  状态：
+                  前台显示：
                 </Col>
                 <Col s="12" l="10">
                   <IceFormBinder name="status">

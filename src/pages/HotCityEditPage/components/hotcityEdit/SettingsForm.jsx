@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import {baseUrl,uploadUrl,ajaxTo} from '../../../../util/util';
+import {baseUrl,uploadUrl,ajaxTo,ajaxCors} from '../../../../util/util';
+import gdMapConfig from '../../../../util/config';
 import IceContainer from '@icedesign/container';
 import { Feedback } from '@icedesign/base';
 import Img from '@icedesign/img';
@@ -21,11 +22,12 @@ import {
 const {Row, Col} = Grid;
 const {Core} = Upload;
 const {DragUpload}=Upload;
+const { Combobox } = Select;
 
 const TabPane = Tab.TabPane;
 const tabs = [
-  { tab: "导航列表", key: 0, content: "/categoryListPage"},
-  { tab: "导航编辑", key: 1, content: "/categoryEditPage/create"},
+  { tab: "热门城市列表", key: 0, content: "/hotCityListPage"},
+  { tab: "热门城市编辑", key: 1, content: "/hotCityEditPage/cityId"},
 ];
 
 
@@ -54,18 +56,38 @@ export default class SettingsForm extends Component {
     super(props);
 
     this.state = {
-      img_path:'',
       status: false,
+      provinceList:[]
     };
   }
 
   componentWillMount(){
-    console.log(uploadUrl);
-    const activityId = this.props.history.params.id;
+    const that = this;
+    const activityId = this.props.history.params.cityId;
+
+    let provinceList = [...that.state.provinceList];
+    // 获取城市
+    const province = ajaxTo('api.php?entry=app&c=logistics&a=company&do=city',{})
+    .then((res) => {
+      let allData = res.data;
+      for (var v in allData) {
+        if(allData[v]){
+          allData[v].map((vi,ii) => {
+            provinceList.push(vi)
+          })
+        }
+      }
+    })
+
+    this.setState({
+      provinceList
+    })
+
     // 正确获取到activityId的值，去获取他的值
-    if(activityId != 'bannercreate'){
-      ajaxTo('api.php?entry=sys&c=logistics&a=nav&do=detail',{'id':activityId})
+    if(activityId != 'create'){
+      ajaxTo('api.php?entry=sys&c=logistics&a=city_hot&do=detail',{'id':activityId})
       .then((res)=>{
+        console.log(res);
         this.setState({...res});
       })
     }
@@ -75,18 +97,17 @@ export default class SettingsForm extends Component {
 
   }
 
-  onSuccess = (res, file) => {
-    console.log(res)
-    Feedback.toast.success('上传成功');
-    const logoImg = res.imgURL;
-    this.setState({
-      'img_path': logoImg
-    })
-  }
-
   onFormChange = (value) => {
     this.setState({value});
-  };
+  }
+
+  onInputUpdate(value) {
+    console.log(value);
+  }
+
+  onInputBlur(e, value) {
+    console.log("blur", value);
+  }
 
   tabClick = (key) => {
     const url = tabs[key].content;
@@ -102,7 +123,7 @@ export default class SettingsForm extends Component {
       }
       console.log(this.props);
       //修改区
-      const newrequestUrl=this.props.history.params.id=='create'?'api.php?entry=sys&c=logistics&a=nav&do=add':'api.php?entry=sys&c=logistics&a=nav&do=edit';
+      const newrequestUrl=this.props.history.params.cityId=='create'?'api.php?entry=sys&c=logistics&a=city_hot&do=add':'api.php?entry=sys&c=logistics&a=city_hot&do=edit';
 
       delete value.value;
 
@@ -117,7 +138,7 @@ export default class SettingsForm extends Component {
         Feedback.toast.success(res.message);
 
         setTimeout(function(){
-          that.props.history.router.push('/categoryListPage');
+          that.props.history.router.push('/hotCityListPage');
         },1000);
 
       }, function(value) {
@@ -144,74 +165,22 @@ export default class SettingsForm extends Component {
 
             <Row style={styles.formItem}>
               <Col xxs="6" s="2" l="2" style={styles.formLabel}>
-                标题：
+                城市的选择：
               </Col>
 
               <Col s="12" l="10">
-                <IceFormBinder name="name" required={true} message="必须填写标题">
-                  <Input style={{
-                      width: '100%'
-                    }}/>
+                <IceFormBinder name="name" required={true} message="必须选择热门城市">
+                  <Combobox
+                    hasArrow={true}
+                    onInputBlur={this.onInputBlur.bind(this)}
+                    onInputUpdate={this.onInputUpdate.bind(this)}
+                    dataSource={this.state.provinceList}
+                    style={{width:'100%'}}
+                    placeholder="请选择热门城市"
+                  >
+                  </Combobox>
                 </IceFormBinder>
                 <IceFormError name="name"/>
-              </Col>
-            </Row>
-
-            <Row style={styles.formItem}>
-              <Col xxs="6" s="2" l="2" style={styles.formLabel}>
-                链接：
-              </Col>
-
-              <Col s="12" l="10">
-                <IceFormBinder name="url" required={false}>
-                  <Input style={{
-                      width: '100%'
-                    }}/>
-                </IceFormBinder>
-                <IceFormError name="url"/>
-              </Col>
-            </Row>
-
-
-            <Row style={styles.imgPadding}>
-              <Col  xxs="6" s="2" l="2" style={styles.formLabel}>
-                封面图：
-              </Col>
-              <Col s="12" l="10">
-                  <Upload
-                    style={{
-                      display: "block",
-                      textAlign: "center",
-                      width: "120px",
-                      height: "120px",
-                      border: "none",
-                      borderRadius: "5px",
-                      fontSize: "12px"
-                    }}
-                    action={uploadUrl}
-                    accept="image/png, image/jpg, image/jpeg, image/gif, image/bmp"
-                    name="filename"
-                    beforeUpload={this.beforeUpload}
-                    onSuccess={this.onSuccess}
-                    onError={this.onError}
-                  >
-                  {this.state.img_path ?
-                    <Img
-                      width={120}
-                      height={120}
-                      src={baseUrl + this.state.img_path}
-                      type="cover"
-                      style={{
-                        borderRadius:"5px"
-                      }}
-                    />
-                    :
-                    <div style={{ width:"120px",height:"120px",display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center",cursor:"pointer",border:"1px dashed #aaa",borderRadius:"5px"}}>
-                      <div style={{ color:"#3080FE",fontSize:"30px",width:"100%",textAlign:"center"}}>+</div>
-                      <div style={{ color:"#3080FE",fontSize:"14px",width:"100%",textAlign:"center"}}>上传图片</div>
-                    </div>
-                  }
-                </Upload>
               </Col>
             </Row>
 
@@ -231,34 +200,6 @@ export default class SettingsForm extends Component {
                 <IceFormError name="displayorder"/>
               </Col>
             </Row>
-
-            <Row style={styles.formItem}>
-              <Col xxs="6" s="2" l="2" style={styles.formLabel}>
-                分类：
-              </Col>
-              <Col s="12" l="10">
-                <IceFormBinder name="category">
-                    <Select
-                      placeholder="选择分类"
-                    >
-                      <Option value="1">固定</Option>
-                      <Option value="2">动态</Option>
-                    </Select>
-                </IceFormBinder>
-              </Col>
-            </Row>
-
-            <Row style={styles.formItem}>
-              <Col xxs="6" s="2" l="2" style={styles.formLabel}>
-                状态：
-              </Col>
-              <Col s="12" l="10">
-                <IceFormBinder name="status">
-                  <SwitchForForm defaultChecked={this.state.status}/>
-                </IceFormBinder>
-              </Col>
-            </Row>
-
 
             <Row style={styles.btns}>
               <Col xxs="6" s="2" l="2" style={styles.formLabel}>

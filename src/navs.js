@@ -95,25 +95,39 @@ const customAsideNavs = [
         to:'/advListPage'
       }
     ]
-  },
-  {
+  },{
     name:'categoryManage',
-    text:'分类管理',
+    text:'导航管理',
     icon:'cascades',
     children: [
       {
         name:'categoryEdit',
-        text:'分类添加',
+        text:'导航添加',
         to:'/categoryEditPage/create'
       },
       {
         name:'categoryList',
-        text:'分类列表',
+        text:'导航列表',
         to:'/categoryListPage'
       }
     ]
-  },
-  {
+  },{
+    name:'HotCityManage',
+    text:'热门城市管理',
+    icon:'material',
+    children: [
+      {
+        name:'hotcityEdit',
+        text:'热门城市添加',
+        to:'/hotCityEditPage/create'
+      },
+      {
+        name:'hotcityList',
+        text:'热门城市列表',
+        to:'/hotCityListPage'
+      }
+    ]
+  },{
     name:'authorManage',
     text: '权限管理',
     icon: 'yonghu',
